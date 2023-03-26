@@ -18,7 +18,7 @@ main.add('Ввести ФИО водителя').add('Инфо').add('Конта
 #abuss
 @dp.message_handler(text='Ввести ФИО водителя')
 async def start_fio_handler(message: types.Message):
-    await message.answer('Жду ФИО водителя.')
+    await message.answer('Жду Имя Отчество Ф. водителя.')
     # Сохраняем флаг ожидания ФИО водителя для данного пользователя
     context = dp.current_state(chat=message.chat.id)
     await context.set_state('waiting_for_fio')
@@ -29,8 +29,8 @@ async def handle_text_messages(message: types.Message):
     with Image.open('Images/Image1.jpg') as img:
         # Добавляем ФИО водителя на изображение
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 40)
-        draw.text((260, 719), message.text, (255, 255, 255), font=font)
+        font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 35)
+        draw.text((320, 680), message.text, (255, 255, 255), font=font)
         img.save('Images/output.jpg')
         # Отправляем пользователю изображение с ФИО водителя
         with open('Images/output.jpg', 'rb') as photo:
