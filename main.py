@@ -26,11 +26,11 @@ async def start_fio_handler(message: types.Message):
 # Вложенный обработчик текстовых сообщений
 @dp.message_handler(state='waiting_for_fio')
 async def handle_text_messages(message: types.Message):
-    with Image.open('Images/Image.jpg') as img:
+    with Image.open('Images/Image1.jpg') as img:
         # Добавляем ФИО водителя на изображение
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("arial.ttf", 50)
-        draw.text((50, 50), message.text, (255, 255, 255), font=font)
+        font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 40)
+        draw.text((260, 719), message.text, (255, 255, 255), font=font)
         img.save('Images/output.jpg')
         # Отправляем пользователю изображение с ФИО водителя
         with open('Images/output.jpg', 'rb') as photo:
