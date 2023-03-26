@@ -1,5 +1,6 @@
 import os
-import io
+import datetime
+import pytz
 
 from PIL import Image, ImageDraw, ImageFont
 from aiogram import Bot, Dispatcher, executor, types
@@ -11,6 +12,8 @@ load_dotenv()
 storage = MemoryStorage()
 bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot = bot, storage = storage)
+tz = pytz.timezone('Asia/Yakutsk')
+current_time = datetime.datetime.now(tz)
 
 main = ReplyKeyboardMarkup(resize_keyboard=True)
 main.add('Ввести ФИО водителя').add('Инфо').add('Контакт')
@@ -19,6 +22,7 @@ main.add('Ввести ФИО водителя').add('Инфо').add('Конта
 @dp.message_handler(text='Ввести ФИО водителя')
 async def start_fio_handler(message: types.Message):
     await message.answer('Жду Имя Отчество Ф. водителя.')
+    await message.answer('Например: Михаил Петрович А.')
     # Сохраняем флаг ожидания ФИО водителя для данного пользователя
     context = dp.current_state(chat=message.chat.id)
     await context.set_state('waiting_for_fio')
@@ -29,8 +33,20 @@ async def handle_text_messages(message: types.Message):
     with Image.open('Images/Image1.jpg') as img:
         # Добавляем ФИО водителя на изображение
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 35)
-        draw.text((320, 680), message.text, (255, 255, 255), font=font)
+        font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 40)
+        font_time = ImageFont.truetype("fonts/DroidSans.ttf", 40)
+        text = message.text
+        time = current_time.strftime("%H:%M")
+        # Text
+        text_width, text_height = draw.textsize(text, font=font)
+        # Time
+        text_width1, text_height1 = draw.textsize(time, font=font_time)
+        x = 539 - text_width/2
+        y = 700 - text_height/2
+        x1 = 128 - text_width1/2
+        y1 = 35 - text_height1/2
+        draw.text((x, y), text, (255, 255, 255), font=font)
+        draw.text((x1, y1), time, (255, 255, 255), font=font_time)
         img.save('Images/output.jpg')
         # Отправляем пользователю изображение с ФИО водителя
         with open('Images/output.jpg', 'rb') as photo:
@@ -49,15 +65,6 @@ async def cmd_start(message: types.Message):
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
     await message.answer(f'Приветствую!', reply_markup=main)
-
-# dont!
-#@dp.message_handler()
-#async def answer(message: types.Message):
-   #await message.reply('Я тебя не понимаю.')
-
-#@dp.errors_handler()
-#async def errors_handler(update, error):
-    #print(f'Произошла ошибка: {error}')
 
 if __name__ == '__main__':
     executor.start_polling(dp)
