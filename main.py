@@ -12,8 +12,7 @@ load_dotenv()
 storage = MemoryStorage()
 bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot = bot, storage = storage)
-tz = pytz.timezone('Asia/Yakutsk')
-current_time = datetime.datetime.now(tz)
+current_time = datetime.datetime.now()
 
 main = ReplyKeyboardMarkup(resize_keyboard=True)
 main.add('Ввести ФИО водителя').add('Инфо').add('Контакт')
@@ -55,6 +54,18 @@ async def handle_text_messages(message: types.Message):
     context = dp.current_state(chat=message.chat.id)
     await context.reset_state()
 
+
+#INFO
+@dp.message_handler(text=['Инфо'])
+async def cmd_start(message: types.Message):
+    await message.answer(f'*Во-первых*, вам надо узнать ФИО водителя автобуса, для этого используется сбербанк '
+                         f'или другой банк.\n'
+                         f'\n'
+                         f'*Во-вторых*, вводите ФИО в формате(внимание!) Имя, Отчество, Ф.\n'
+                         f'\n'
+                         f'*В-третьих*, показываете водителю полученное изображение и быстро выходите из автобуса.\n'
+                         f'\n'
+                         f'*Данный телеграм-бот используется на свой страх и риск.*', parse_mode='Markdown')
 
 #FIO
 @dp.message_handler(text=['Контакт'])
