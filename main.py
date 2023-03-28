@@ -1,5 +1,6 @@
 import os
 import datetime
+import pytz
 
 from PIL import Image, ImageDraw, ImageFont
 from aiogram import Bot, Dispatcher, executor, types
@@ -11,7 +12,6 @@ load_dotenv()
 storage = MemoryStorage()
 bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot = bot, storage = storage)
-current_time = datetime.datetime.now()
 
 main = ReplyKeyboardMarkup(resize_keyboard=True)
 main.add('Ввести ФИО водителя').add('Инфо').add('Контакт')
@@ -29,10 +29,12 @@ async def start_fio_handler(message: types.Message):
 @dp.message_handler(state='waiting_for_fio')
 async def handle_text_messages(message: types.Message):
     with Image.open('Images/Image1.jpg') as img:
-        # Добавляем ФИО водителя на изображение
+        # Добавляем ФИОpytz.timezone('Asia/Yakutsk') водителя на изображение
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 40)
         font_time = ImageFont.truetype("fonts/DroidSans.ttf", 40)
+        tz = pytz.timezone('Asia/Yakutsk')
+        current_time = datetime.datetime.now(tz)
         text = message.text
         time = current_time.strftime("%H:%M")
         # Text
