@@ -1,6 +1,5 @@
 import os
 import datetime
-import pytz
 
 from PIL import Image, ImageDraw, ImageFont
 from aiogram import Bot, Dispatcher, executor, types

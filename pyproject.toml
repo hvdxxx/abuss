@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "aBuss_bot"
+version = "0.1.0"
+description = ""
+authors = ["hvdxxx"]
+packages = [{include = " "}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^2.25.1"
+python-dotenv = "^1.0.0"
+PIL = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
