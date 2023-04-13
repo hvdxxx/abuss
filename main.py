@@ -1,5 +1,6 @@
 import os
 import datetime
+import pytz
 
 from PIL import Image, ImageDraw, ImageFont
 from aiogram import Bot, Dispatcher, executor, types
@@ -7,11 +8,12 @@ from aiogram.types import ReplyKeyboardMarkup
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
+
 load_dotenv()
+PROXY_URL = "http://proxy.server:3128"
 storage = MemoryStorage()
-bot = Bot(os.getenv('TOKEN'))
+bot = Bot(os.getenv('TOKEN'), proxy = PROXY_URL)
 dp = Dispatcher(bot = bot, storage = storage)
-current_time = datetime.datetime.now()
 
 main = ReplyKeyboardMarkup(resize_keyboard=True)
 main.add('Ввести ФИО водителя').add('Инфо').add('Контакт')
@@ -34,6 +36,8 @@ async def handle_text_messages(message: types.Message):
         font = ImageFont.truetype("fonts/SFProText-Medium.ttf", 40)
         font_time = ImageFont.truetype("fonts/DroidSans.ttf", 40)
         text = message.text
+        tz = pytz.timezone('Asia/Yakutsk')
+        current_time = datetime.datetime.now(tz)
         time = current_time.strftime("%H:%M")
         # Text
         text_width, text_height = draw.textsize(text, font=font)
