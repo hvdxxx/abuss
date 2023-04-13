@@ -9,9 +9,9 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
 load_dotenv()
-# PROXY_URL = "http://proxy.server:3128"
+PROXY_URL = "http://proxy.server:3128"
 storage = MemoryStorage()
-bot = Bot(os.getenv('TOKEN'))  # proxy=PROXY_URL)
+bot = Bot(os.getenv('TOKEN'), proxy=PROXY_URL)
 dp = Dispatcher(bot=bot, storage=storage)
 # keyboards
 main = ReplyKeyboardMarkup(resize_keyboard=True)
